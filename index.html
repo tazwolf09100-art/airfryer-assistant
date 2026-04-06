@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Airfryer">
+  <title>Airfryer Assistant</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="light"] {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+      --radius: 20px; --pill: 999px;
+      --bg: #f7f6f2; --surface: #fbfbf9; --surface2: #f1eee8; --border: #d4d1ca;
+      --text: #28251d; --muted: #6f6d67; --primary: #01696f; --primary-soft: #dceceb;
+      --shadow: 0 10px 30px rgba(40,37,29,.08); --font: 'Satoshi', system-ui, sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #171614; --surface: #1c1b19; --surface2: #242320; --border: #393836;
+      --text: #e8e4dc; --muted: #a49f96; --primary: #4f98a3; --primary-soft: #28383a;
+      --shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); font: var(--text-base)/1.5 var(--font); }
+    select, button { font: inherit; }
+    .wrap { max-width: 780px; margin: 0 auto; padding: max(env(safe-area-inset-top), 1rem) 1rem max(env(safe-area-inset-bottom), 1.25rem); }
+    .top { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1.25rem; }
+    .brand { display:flex; gap:.8rem; align-items:center; }
+    .logo { width:44px; height:44px; border-radius:14px; background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white)); display:grid; place-items:center; box-shadow: var(--shadow); }
+    .logo svg { width:24px; height:24px; color:#fff; }
+    h1 { margin:0; font-size:var(--text-xl); line-height:1.05; }
+    .muted { color: var(--muted); }
+    .theme { width:46px; height:46px; border:1px solid var(--border); border-radius:999px; background:var(--surface); }
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:1.2rem; }
+    .panel + .panel { margin-top:1rem; }
+    .grid { display:grid; gap:1rem; }
+    label { display:block; font-size:var(--text-sm); font-weight:700; margin-bottom:.4rem; }
+    select { width:100%; min-height:50px; border-radius:14px; border:1px solid var(--border); background:var(--surface2); color:var(--text); padding:.85rem 1rem; }
+    .actions { display:flex; gap:.75rem; margin-top:1rem; }
+    .btn { flex:1; min-height:50px; border:0; border-radius:16px; font-weight:700; }
+    .btn-primary { background:var(--primary); color:#fff; }
+    .btn-soft { background:var(--primary-soft); color:var(--primary); }
+    .big { font-size: clamp(1.8rem, 1.4rem + 2vw, 2.6rem); line-height:1; margin:.2rem 0; }
+    .row { display:flex; flex-wrap:wrap; gap:.5rem; margin: .9rem 0 1rem; }
+    .chip { padding:.5rem .8rem; background:var(--surface2); border:1px solid var(--border); border-radius:var(--pill); font-size:var(--text-sm); }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; }
+    .mini { padding:.9rem 1rem; background:var(--surface2); border:1px solid var(--border); border-radius:16px; }
+    .mini strong { display:block; font-size:var(--text-sm); margin-bottom:.3rem; }
+    ul { margin: 1rem 0 0; padding-left: 1.2rem; }
+    li { margin-bottom: .45rem; }
+    .foot { margin-top:1rem; font-size:var(--text-sm); color:var(--muted); }
+    @media (max-width:640px){ .two{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8h12"></path><path d="M7 8c0 6 2 9 5 9s5-3 5-9"></path><path d="M10 4c0 1-.5 1.5-1 2"></path><path d="M14 4c0 1 .5 1.5 1 2"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>Airfryer Assistant</h1>
+          <div class="muted">Mini app iPhone pour la cuisson rapide.</div>
+        </div>
+      </div>
+      <button class="theme" type="button" id="themeBtn" aria-label="Changer le thème">◐</button>
+    </div>
+
+    <section class="panel">
+      <strong>Version prête pour GitHub Pages</strong>
+      <p class="muted">Choisis ton ingrédient, ta garniture, ton type de préparation et la texture voulue. L’app propose ensuite une base de cuisson Airfryer simple et lisible.</p>
+    </section>
+
+    <section class="panel">
+      <div class="grid">
+        <div>
+          <label for="main">Ingrédient principal</label>
+          <select id="main">
+            <option value="poulet">Poulet</option>
+            <option value="boeuf">Bœuf</option>
+            <option value="poisson">Poisson</option>
+            <option value="legumes">Légumes</option>
+            <option value="pommes">Pommes de terre</option>
+            <option value="surgele">Surgelés</option>
+          </select>
+        </div>
+        <div>
+          <label for="garnish">Garniture</label>
+          <select id="garnish">
+            <option value="sans">Sans garniture</option>
+            <option value="legumes">Légumes</option>
+            <option value="pommes">Pommes de terre</option>
+            <option value="riz">Riz déjà cuit</option>
+          </select>
+        </div>
+        <div>
+          <label for="cut">Type de préparation</label>
+          <select id="cut">
+            <option value="morceaux">Morceaux</option>
+            <option value="brochette">Brochette</option>
+            <option value="filet">Filet</option>
+            <option value="steak">Steak</option>
+            <option value="wings">Wings</option>
+            <option value="nuggets">Nuggets</option>
+            <option value="quartiers">Quartiers</option>
+            <option value="vrac">Vrac</option>
+          </select>
+        </div>
+        <div>
+          <label for="texture">Résultat souhaité</label>
+          <select id="texture">
+            <option value="normal">Standard</option>
+            <option value="tendre">Tendre</option>
+            <option value="croustillant">Croustillant</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="goBtn" type="button">Trouver ma cuisson</button>
+        <button class="btn btn-soft" id="resetBtn" type="button">Réinitialiser</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-live="polite">
+      <div class="muted">Suggestion</div>
+      <div class="big" id="temp">190°C</div>
+      <div id="time">12 à 16 min</div>
+      <div class="row" id="chips"></div>
+      <div class="two">
+        <div class="mini"><strong>Préchauffage</strong><span id="preheat">Oui, 3 min</span></div>
+        <div class="mini"><strong>À mi-cuisson</strong><span id="mid">Retourner ou secouer</span></div>
+      </div>
+      <ul id="tips"></ul>
+      <div class="foot">Base indicative : adapte selon la taille, la quantité et ton Airfryer.</div>
+    </section>
+  </div>
+
+  <script>
+    const base = {
+      poulet: { default:{temp:190,time:[14,18],preheat:'Oui, 3 min',mid:'Retourner à mi-cuisson',tips:['Ne surcharge pas le panier.','Vérifie le cœur avant de servir.']}, morceaux:{temp:190,time:[16,20]}, brochette:{temp:200,time:[10,14]}, filet:{temp:190,time:[12,16]}, wings:{temp:200,time:[18,22],mid:'Retourner 1 fois'}, nuggets:{temp:200,time:[8,12],preheat:'Non obligatoire'} },
+      boeuf: { default:{temp:200,time:[8,12],preheat:'Oui, 3 min',mid:'Retourner à mi-cuisson',tips:['Laisse reposer 2 min après cuisson.','Évite les morceaux trop épais en V1.']}, steak:{temp:200,time:[7,10]}, brochette:{temp:200,time:[8,12]}, morceaux:{temp:195,time:[9,13]} },
+      poisson: { default:{temp:180,time:[8,12],preheat:'Oui, 2 min',mid:'Surveiller sans trop manipuler',tips:['Un filet d’huile légère peut aider.','Les filets fins cuisent vite.']}, filet:{temp:180,time:[8,10]}, morceaux:{temp:185,time:[9,12]} },
+      legumes: { default:{temp:190,time:[8,14],preheat:'Non obligatoire',mid:'Secouer 1 à 2 fois',tips:['Coupe régulière pour homogénéité.','Un filet d’huile suffit.']}, vrac:{temp:190,time:[8,12]}, morceaux:{temp:195,time:[10,14]} },
+      pommes: { default:{temp:200,time:[20,28],preheat:'Oui, 3 min',mid:'Secouer 2 fois',tips:['Plus elles sont fines, plus elles croustillent.','Ne tasse pas les pommes de terre.']}, quartiers:{temp:200,time:[22,28]}, vrac:{temp:195,time:[18,24]} },
+      surgele: { default:{temp:200,time:[8,14],preheat:'Oui, 3 min',mid:'Secouer ou retourner',tips:['Ajoute 2 min si le panier est très rempli.','Regarde aussi l’emballage du produit.']}, nuggets:{temp:200,time:[8,10]}, quartiers:{temp:200,time:[14,18]}, wings:{temp:200,time:[16,20]} }
+    };
+    const garnish = { sans:{temp:0,min:0,max:0,note:'cuisson centrée sur le principal'}, legumes:{temp:-5,min:2,max:3,note:'ajout de légumes, surveille l’espace'}, pommes:{temp:0,min:4,max:6,note:'les pommes de terre demandent plus de temps'}, riz:{temp:-10,min:1,max:2,note:'le riz sert surtout de réchauffage'} };
+    const texture = { tendre:{temp:-10,min:-2,max:-1,note:'version plus douce'}, normal:{temp:0,min:0,max:0,note:'équilibre standard'}, croustillant:{temp:10,min:1,max:3,note:'fin de cuisson plus vive'} };
+    const labels = { poulet:'Poulet', boeuf:'Bœuf', poisson:'Poisson', legumes:'Légumes', pommes:'Pommes de terre', surgele:'Surgelés', sans:'Sans garniture', riz:'Riz déjà cuit', morceaux:'Morceaux', brochette:'Brochette', filet:'Filet', steak:'Steak', wings:'Wings', nuggets:'Nuggets', quartiers:'Quartiers', vrac:'Vrac', tendre:'Tendre', normal:'Standard', croustillant:'Croustillant' };
+
+    const $ = id => document.getElementById(id);
+    function calc() {
+      const m = $('main').value, g = $('garnish').value, c = $('cut').value, t = $('texture').value;
+      const src = base[m][c] ? {...base[m].default, ...base[m][c]} : {...base[m].default};
+      const ga = garnish[g], ta = texture[t];
+      const temp = src.temp + ga.temp + ta.temp;
+      const min = Math.max(4, src.time[0] + ga.min + ta.min);
+      const max = Math.max(min + 1, src.time[1] + ga.max + ta.max);
+      $('temp').textContent = temp + '°C';
+      $('time').textContent = min + ' à ' + max + ' min';
+      $('preheat').textContent = src.preheat || 'Oui, 3 min';
+      $('mid').textContent = src.mid || 'Retourner ou secouer';
+      $('chips').innerHTML = [labels[m], labels[c], labels[g], labels[t]].map(v => `<span class="chip">${v}</span>`).join('');
+      $('tips').innerHTML = [...(src.tips || []), 'Garniture : ' + ga.note + '.', 'Texture : ' + ta.note + '.'].map(v => `<li>${v}</li>`).join('');
+    }
+    $('goBtn').addEventListener('click', calc);
+    $('resetBtn').addEventListener('click', () => { $('main').value='poulet'; $('garnish').value='sans'; $('cut').value='morceaux'; $('texture').value='normal'; calc(); });
+    (() => {
+      const root = document.documentElement; let mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', mode);
+      $('themeBtn').addEventListener('click', () => { mode = mode === 'dark' ? 'light' : 'dark'; root.setAttribute('data-theme', mode); });
+    })();
+    calc();
+  </script>
+</body>
+</html>
